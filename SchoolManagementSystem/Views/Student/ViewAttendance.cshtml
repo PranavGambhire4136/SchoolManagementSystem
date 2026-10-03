@@ -1,0 +1,245 @@
+﻿@model SchoolManagementSystem.Models.ViewModel.ViewAttendanceViewModel
+
+@{
+    ViewData["Title"] = "View Attendance";
+
+    int totalClasses = Model.Attendances.Count;
+    int totalPresent = Model.Attendances.Count(a => a.IsPresent);
+    int totalAbsent = Model.Attendances.Count(a => !a.IsPresent);
+
+    double attendancePercentage = totalClasses > 0
+        ? (double)totalPresent / totalClasses * 100
+        : 0;
+}
+
+<div class="container mt-4">
+
+    <div class="card border-0 shadow-sm">
+
+        <div class="card-header bg-dark text-white">
+            <h3 class="mb-0">
+                My Attendance
+            </h3>
+        </div>
+
+        <div class="card-body">
+
+            <!-- ================= SUBJECT SELECTION ================= -->
+
+            <form asp-controller="Student"
+                  asp-action="ViewAttendance"
+                  method="get">
+
+                <div class="row align-items-end">
+
+                    <div class="col-md-8">
+
+                        <label class="form-label fw-semibold">
+                            Select Subject
+                        </label>
+
+                        <select name="subjectId"
+                                class="form-select"
+                                onchange="this.form.submit()">
+
+                            <option value="0">
+                                -- Select Subject --
+                            </option>
+
+                            @foreach (var subject in Model.Subjects)
+                            {
+                                <option value="@subject.Id"
+                                        selected="@(Model.SubjectId == subject.Id)">
+
+                                    @subject.Name
+
+                                </option>
+                            }
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+
+            <!-- ================= ATTENDANCE ================= -->
+            @if (Model.SubjectId != 0)
+            {
+                <hr class="my-4" />
+
+                <!-- ================= SUMMARY ================= -->
+
+                <div class="row g-3 mb-4">
+
+                    <!-- Total Classes -->
+
+                    <div class="col-md-3">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-body text-center">
+
+                                <i class="bi bi-calendar3 fs-2 text-primary"></i>
+
+                                <h6 class="text-muted mt-2">
+                                    Total Classes
+                                </h6>
+
+                                <h3 class="fw-bold">
+                                    @totalClasses
+                                </h3>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- Present -->
+
+                    <div class="col-md-3">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-body text-center">
+
+                                <i class="bi bi-check-circle-fill fs-2 text-success"></i>
+
+                                <h6 class="text-muted mt-2">
+                                    Present
+                                </h6>
+
+                                <h3 class="fw-bold text-success">
+                                    @totalPresent
+                                </h3>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- Absent -->
+
+                    <div class="col-md-3">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-body text-center">
+
+                                <i class="bi bi-x-circle-fill fs-2 text-danger"></i>
+
+                                <h6 class="text-muted mt-2">
+                                    Absent
+                                </h6>
+
+                                <h3 class="fw-bold text-danger">
+                                    @totalAbsent
+                                </h3>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- Percentage -->
+
+                    <div class="col-md-3">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-body text-center">
+
+                                <i class="bi bi-percent fs-2 text-warning"></i>
+
+                                <h6 class="text-muted mt-2">
+                                    Attendance
+                                </h6>
+
+                                <h3 class="fw-bold text-warning">
+                                    @attendancePercentage.ToString("F2")%
+                                </h3>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <!-- ================= ATTENDANCE TABLE ================= -->
+
+                <h5 class="fw-bold mb-3">
+                    Attendance Records
+                </h5>
+
+                @if (Model.Attendances.Any())
+                {
+                    <div class="table-responsive">
+
+                        <table class="table table-bordered table-hover align-middle">
+
+                            <thead class="table-light">
+
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Subject</th>
+                                    <th>Teacher</th>
+                                    <th>Status</th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                @foreach (var attendance in Model.Attendances)
+                                {
+                                    <tr>
+
+                                        <td>
+                                            @attendance.Date.ToString("dd-MM-yyyy")
+                                        </td>
+
+                                        <td>
+                                            @attendance.Subject?.Name
+                                        </td>
+
+                                        <td>
+                                            @attendance.Teacher?.User?.Name
+                                        </td>
+
+                                        <td>
+
+                                            @if (attendance.IsPresent)
+                                            {
+                                                <span class="badge bg-success">
+                                                    <i class="bi bi-check-circle me-1"></i>
+                                                    Present
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-danger">
+                                                    <i class="bi bi-x-circle me-1"></i>
+                                                    Absent
+                                                </span>
+                                            }
+
+                                        </td>
+
+                                    </tr>
+                                }
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-info">
+                        No attendance records found for this subject.
+                    </div>
+                }
+
+            }
+
+        </div>
+
+    </div>
+
+</div>

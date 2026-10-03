@@ -1,0 +1,133 @@
+﻿@model SchoolManagementSystem.Models.ViewModel.AddStudentViewModel
+
+@{
+    ViewData["Title"] = "Add Student";
+}
+
+<div class="container py-5">
+
+    ```
+    <div class="row justify-content-center">
+        <div class="col-md-7 col-lg-6">
+
+            <div class="card shadow-lg border-0 rounded-4">
+
+                <div class="card-header bg-dark text-white text-center py-4 rounded-top-4">
+                    <h2 class="mb-1">
+                        <i class="bi bi-person-plus-fill"></i>
+                        Add Student
+                    </h2>
+
+                    <p class="text-secondary mb-0">
+                        Create a new student account
+                    </p>
+                </div>
+
+                <div class="card-body p-4 p-md-5">
+
+                    <form asp-action="AddStudent" method="post">
+
+                        <div class="mb-4">
+                            <label asp-for="Student.User.Name"
+                                   class="form-label fw-semibold">
+                                Student Name
+                            </label>
+
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="bi bi-person"></i>
+                                </span>
+
+                                <input asp-for="Student.User.Name"
+                                       class="form-control"
+                                       placeholder="Enter student name" />
+                            </div>
+
+                            <span asp-validation-for="Student.User.Name"
+                                  class="text-danger small">
+                            </span>
+                        </div>
+
+
+                        <div class="mb-4">
+                            <label asp-for="Student.User.Email"
+                                   class="form-label fw-semibold">
+                                Email Address
+                            </label>
+
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="bi bi-envelope"></i>
+                                </span>
+
+                                <input asp-for="Student.User.Email"
+                                       class="form-control"
+                                       placeholder="Enter student email"
+                                       type="email" />
+                            </div>
+
+                            <span asp-validation-for="Student.User.Email"
+                                  class="text-danger small">
+                            </span>
+                        </div>
+
+
+                        <div class="mb-4">
+                            <label asp-for="Student.ClassId"
+                                   class="form-label fw-semibold">
+                                Class
+                            </label>
+
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="bi bi-mortarboard"></i>
+                                </span>
+
+                                <select asp-for="Student.ClassId"
+                                        class="form-select"
+                                        asp-items="@(new SelectList(Model.Classes, "Id", "Standard"))">
+
+                                    <option value="">
+                                        -- Select Class --
+                                    </option>
+
+                                </select>
+                            </div>
+
+                            <span asp-validation-for="Student.ClassId"
+                                  class="text-danger small">
+                            </span>
+                        </div>
+
+
+                        <div class="d-flex gap-2 justify-content-end mt-4">
+
+                            <a
+                               class="btn btn-outline-secondary px-4">
+                                Cancel
+                            </a>
+
+                            <button type="submit"
+                                    class="btn btn-dark px-4">
+                                <i class="bi bi-person-plus-fill me-1"></i>
+                                Add Student
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+    ```
+
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

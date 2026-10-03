@@ -1,0 +1,109 @@
+﻿@model SchoolManagementSystem.Models.ApplicationUser
+
+@{
+    ViewData["Title"] = "Profile";
+}
+
+<div class="container mt-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-8 col-lg-6">
+
+            <div class="card shadow border-0">
+
+                <!-- Header -->
+                <div class="card-header bg-primary text-white text-center py-4">
+                    <div class="rounded-circle bg-white text-primary d-flex align-items-center justify-content-center mx-auto mb-3"
+                         style="width: 90px; height: 90px; font-size: 40px; font-weight: bold;">
+                        @(string.IsNullOrWhiteSpace(Model.Name)
+                                                ? string.IsNullOrWhiteSpace(Model.Email) 
+                                                ? "?"
+                                                : Model.Email.Substring(0, 1).ToUpper()
+                                                : Model.Name.Substring(0, 1).ToUpper())
+                    </div>
+
+                    <h3 class="mb-1">@Model.Name</h3>
+                    <p class="mb-0">@Model.Email</p>
+                </div>
+
+                <!-- Profile Information -->
+                <div class="card-body p-4">
+
+                    <h5 class="mb-4">Profile Information</h5>
+
+                    <div class="row mb-3">
+                        <div class="col-sm-4 fw-bold">
+                            Name
+                        </div>
+                        <div class="col-sm-8">
+                            @Model.Name
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div class="row mb-3">
+                        <div class="col-sm-4 fw-bold">
+                            Email
+                        </div>
+                        <div class="col-sm-8">
+                            @Model.Email
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div class="row mb-3">
+                        <div class="col-sm-4 fw-bold">
+                            Mobile Number
+                        </div>
+                        <div class="col-sm-8">
+                            @(string.IsNullOrEmpty(Model.PhoneNumber)
+                                                        ? "Not provided"
+                                                        : Model.PhoneNumber)
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div class="row mb-3">
+                        <div class="col-sm-4 fw-bold">
+                            User ID
+                        </div>
+                        <div class="col-sm-8 text-break">
+                            @Model.Id
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Footer -->
+                <div class="card-footer bg-white text-center p-3">
+
+                    <div class="d-flex justify-content-center gap-2">
+
+                        <a asp-controller="Home"
+                           asp-action="Index"
+                           class="btn btn-secondary">
+                            Back
+                        </a>
+
+                        <form asp-action="Logout" method="post">
+                            <button type="submit" class="btn btn-primary">
+                                Logout
+                            </button>
+                        </form>
+
+                    </div>
+
+                </div>>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

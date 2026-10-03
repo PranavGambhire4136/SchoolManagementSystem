@@ -1,0 +1,83 @@
+﻿@model SchoolManagementSystem.Models.ViewModel.AddSubjectViewModel
+
+@{
+    ViewData["Title"] = "Add Subject";
+}
+
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            <h3>Add Subject</h3>
+        </div>
+
+        <div class="card-body">
+
+            <form asp-controller="Subject"
+                  asp-action="AddSubject"
+                  method="post">
+
+                <!-- Subject Name -->
+                <div class="mb-3">
+                    <label asp-for="Name" class="form-label">
+                        Subject Name
+                    </label>
+
+                    <input asp-for="Name"
+                           class="form-control"
+                           placeholder="Enter subject name" />
+
+                    <span asp-validation-for="Name"
+                          class="text-danger">
+                    </span>
+                </div>
+
+                <!-- Classes -->
+                <div class="mb-3">
+                    <label class="form-label">
+                        Assign Subject To Classes
+                    </label>
+
+                    @foreach (var item in Model.Classes)
+                    {
+                        <div class="form-check">
+                            <input class="form-check-input"
+                                   type="checkbox"
+                                   name="ClassIds"
+                                   value="@item.Id"
+                                   id="class_@item.Id"
+                                   @(Model.ClassIds.Contains(item.Id) ? "checked" : "") />
+
+                            <label class="form-check-label"
+                                   for="class_@item.Id">
+                                Class @item.Standard
+                            </label>
+                        </div>
+                    }
+
+                    <span asp-validation-for="ClassIds"
+                          class="text-danger">
+                    </span>
+                </div>
+
+                <button type="submit"
+                        class="btn btn-primary">
+                    Add Subject
+                </button>
+
+                <a asp-controller="Subject"
+                   asp-action="Index"
+                   class="btn btn-secondary">
+                    Cancel
+                </a>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

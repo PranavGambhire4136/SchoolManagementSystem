@@ -1,0 +1,202 @@
+﻿@model SchoolManagementSystem.Models.ViewModel.AddTeacherViewModel
+
+@{
+    ViewData["Title"] = "Add Teacher";
+}
+
+<style>
+    .add-teacher-page {
+        height: 100%;
+        min-height: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px 15px;
+    }
+
+    .teacher-card {
+        width: 100%;
+        max-width: 520px;
+    }
+
+        .teacher-card .card {
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.10);
+        }
+
+        .teacher-card .card-header {
+            padding: 14px !important;
+        }
+
+        .teacher-card .card-body {
+            padding: 20px !important;
+        }
+
+        .teacher-card .mb-4 {
+            margin-bottom: 12px !important;
+        }
+
+        .teacher-card .form-label {
+            margin-bottom: 4px;
+        }
+
+        .teacher-card .form-control,
+        .teacher-card .form-select {
+            height: 38px;
+        }
+
+        .teacher-card .input-group-text {
+            height: 38px;
+        }
+</style>
+
+<div class="add-teacher-page">
+
+    ```
+    <div class="teacher-card">
+
+        <div class="card">
+
+            <!-- Header -->
+            <div class="card-header bg-dark text-white text-center rounded-top-4">
+
+                <h3 class="mb-1">
+                    <i class="bi bi-person-plus-fill"></i>
+                    Add Teacher
+                </h3>
+
+                <p class="text-white-50 mb-0 small">
+                    Create a new teacher account
+                </p>
+
+            </div>
+
+
+            <!-- Body -->
+            <div class="card-body">
+
+                <form asp-action="AddTeacher" method="post">
+
+                    <!-- Name -->
+                    <div class="mb-4">
+
+                        <label asp-for="Name"
+                               class="form-label fw-semibold">
+                            Teacher Name
+                        </label>
+
+                        <div class="input-group">
+
+                            <span class="input-group-text">
+                                <i class="bi bi-person"></i>
+                            </span>
+
+                            <input asp-for="Name"
+                                   type="text"
+                                   class="form-control"
+                                   placeholder="Enter teacher name" />
+
+                        </div>
+
+                        <span asp-validation-for="Name"
+                              class="text-danger small">
+                        </span>
+
+                    </div>
+
+
+                    <!-- Email -->
+                    <div class="mb-4">
+
+                        <label asp-for="Email"
+                               class="form-label fw-semibold">
+                            Email Address
+                        </label>
+
+                        <div class="input-group">
+
+                            <span class="input-group-text">
+                                <i class="bi bi-envelope"></i>
+                            </span>
+
+                            <input asp-for="Email"
+                                   type="email"
+                                   class="form-control"
+                                   placeholder="Enter teacher email" />
+
+                        </div>
+
+                        <span asp-validation-for="Email"
+                              class="text-danger small">
+                        </span>
+
+                    </div>
+
+
+                    <!-- Subject -->
+                    <div class="mb-4">
+
+                        <label asp-for="SubjectId"
+                               class="form-label fw-semibold">
+                            Subject
+                        </label>
+
+                        <div class="input-group">
+
+                            <span class="input-group-text">
+                                <i class="bi bi-book"></i>
+                            </span>
+
+                            <select asp-for="SubjectId"
+                                    class="form-select"
+                                    asp-items="@(new SelectList(Model.Subjects, "Id", "Name"))">
+
+                                <option value="">
+                                    -- Select Subject --
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                        <span asp-validation-for="SubjectId"
+                              class="text-danger small">
+                        </span>
+
+                    </div>
+
+
+                    <!-- Buttons -->
+                    <div class="d-flex gap-2 justify-content-end mt-3">
+
+                        <a asp-controller="Home"
+                           asp-action="Index"
+                           class="btn btn-outline-secondary px-4">
+                            Cancel
+                        </a>
+
+                        <button type="submit"
+                                class="btn btn-dark px-4">
+                            <i class="bi bi-person-plus-fill me-1"></i>
+                            Add Teacher
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+    ```
+
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

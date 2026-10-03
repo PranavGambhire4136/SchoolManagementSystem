@@ -1,0 +1,185 @@
+﻿@model SchoolManagementSystem.Models.ViewModel.MarkAttendanceViewModel
+
+@{
+    ViewData["Title"] = "Mark Attendance";
+}
+
+<div class="container mt-4">
+
+    <div class="card">
+
+        <div class="card-header">
+            <h3>Mark Attendance</h3>
+        </div>
+
+        <div class="card-body">
+
+            <!-- Class + Date Selection -->
+            <form asp-controller="Teacher"
+                  asp-action="MarkAttendance"
+                  method="get">
+
+                <div class="row">
+
+                    <!-- Select Class -->
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label">
+                            Select Class
+                        </label>
+
+                        <select name="classId"
+                                class="form-select"
+                                onchange="this.form.submit()">
+
+                            <option value="0">
+                                -- Select Class --
+                            </option>
+
+                            @foreach (var item in Model.Classes)
+                            {
+                                <option value="@item.Id"
+                                        selected="@(Model.ClassId == item.Id)">
+                                    Class @item.Standard
+                                </option>
+                            }
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- Select Date -->
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label">
+                            Attendance Date
+                        </label>
+
+                        <input type="date"
+                               name="date"
+                               class="form-control"
+                               value="@Model.Date.ToString("yyyy-MM-dd")"
+                               onchange="this.form.submit()" />
+
+                    </div>
+
+                </div>
+
+            </form>
+
+
+            <!-- Students -->
+            @if (Model.ClassId != 0)
+            {
+                @if (Model.Students.Any())
+                {
+                    <form asp-controller="Teacher"
+                          asp-action="MarkAttendance"
+                          method="post">
+
+                        @Html.AntiForgeryToken()
+
+                        <!-- Selected Class -->
+                        <input type="hidden"
+                               asp-for="ClassId" />
+
+                        <!-- Selected Date -->
+                        <input type="hidden"
+                               asp-for="Date" />
+
+
+                        <table class="table table-bordered">
+
+                            <thead>
+
+                                <tr>
+                                    <th>Roll No.</th>
+                                    <th>Student Name</th>
+                                    <th class="text-center">
+                                        Present
+                                    </th>
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody>
+
+                                @for (int i = 0;
+                                                        i < Model.Students.Count;
+                                                        i++)
+                                {
+                                    <tr>
+
+                                        <td>
+                                            @Model.Students[i].RollNo
+                                        </td>
+
+                                        <td>
+                                            @Model.Students[i].StudentName
+                                        </td>
+
+                                        <td class="text-center">
+
+                                            <!-- Student Id -->
+                                            <input type="hidden"
+                                                   asp-for="Students[i].StudentId" />
+
+                                            <!-- Student Name -->
+                                            <input type="hidden"
+                                                   asp-for="Students[i].StudentName" />
+
+                                            <!-- Roll No -->
+                                            <input type="hidden"
+                                                   asp-for="Students[i].RollNo" />
+
+                                            <!-- Present Checkbox -->
+                                            <input asp-for="Students[i].IsPresent"
+                                                   class="form-check-input"
+                                                   style="width:20px;
+                                                                      height:20px;" />
+
+                                        </td>
+
+                                    </tr>
+                                }
+
+                            </tbody>
+
+                        </table>
+
+
+                        <button type="submit"
+                                class="btn btn-primary">
+
+                            Mark Attendance
+
+                        </button>
+
+                    </form>
+                }
+                else
+                {
+                    <div class="alert alert-info">
+                        No students are assigned to this class.
+                    </div>
+                }
+            }
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    @{
+        await Html.RenderPartialAsync(
+            "_ValidationScriptsPartial"
+        );
+    }
+
+}

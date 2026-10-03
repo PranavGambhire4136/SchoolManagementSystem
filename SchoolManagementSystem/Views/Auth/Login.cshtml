@@ -1,0 +1,100 @@
+﻿@using SchoolManagementSystem.Models.ViewModel
+@model LoginViewModel
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="container py-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-6 col-lg-5">
+            
+            <div class="card shadow-lg border-0 rounded-4">
+                
+                @if (ViewData["UserProblem"] != null)
+                {
+                    <div class="alert alert-danger d-flex align-items-center mt-3 mb-3"
+                         role="alert">
+                        <i class="bi bi-exclamation-circle-fill me-2"></i>
+                        <span>@ViewData["UserProblem"]</span>
+                    </div>
+                }
+
+                <div class="card-body p-5">
+
+                    <!-- Heading -->
+                    <div class="text-center mb-4">
+                        <h2 class="fw-bold">Welcome Back</h2>
+                        <p class="text-muted">
+                            Login to your account
+                        </p>
+                    </div>
+
+                    <form asp-action="Login" method="post">
+
+                        <!-- Email -->
+                        <div class="mb-3">
+                            <label asp-for="Email"
+                                   class="form-label fw-semibold">
+                                Email
+                            </label>
+
+                            <input asp-for="Email"
+                                   class="form-control form-control-lg"
+                                   placeholder="Enter your email" />
+
+                            <span asp-validation-for="Email"
+                                  class="text-danger small">
+                            </span>
+                        </div>
+
+                        <!-- Password -->
+                        <div class="mb-4">
+                            <label asp-for="Password"
+                                   class="form-label fw-semibold">
+                                Password
+                            </label>
+
+                            <input asp-for="Password"
+                                   type="password"
+                                   class="form-control form-control-lg"
+                                   placeholder="Enter your password" />
+
+                            <span asp-validation-for="Password"
+                                  class="text-danger small">
+                            </span>
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="d-grid gap-2">
+
+                            <button type="submit"
+                                    class="btn btn-primary btn-lg rounded-3">
+                                Login
+                            </button>
+
+                            <button type="button"
+                                    class="btn btn-outline-secondary btn-lg rounded-3"
+                                    onclick="history.back()">
+                                Back
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

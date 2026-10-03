@@ -1,0 +1,960 @@
+﻿@model SchoolManagementSystem.Models.ViewModel.HomeViewModel
+
+@{
+    ViewData["Title"] = "Home";
+}
+
+<div class="container-fluid px-4">
+
+    <!-- ================= HERO ================= -->
+
+    <div class="bg-dark text-white rounded-4 p-5 mt-4 mb-4 shadow">
+
+        @if (User.Identity?.IsAuthenticated == true)
+        {
+            <div class="mb-3">
+                <span class="badge bg-primary fs-6 px-3 py-2">
+                    Welcome Back
+                </span>
+            </div>
+
+            <h1 class="display-5 fw-bold">
+                Welcome, @Model.UserName
+            </h1>
+
+            <p class="lead text-white-50 mt-3">
+                Manage your school activities, students, teachers,
+                attendance and academic performance from one place.
+            </p>
+
+            <div class="mt-4">
+
+                @if (User.IsInRole("Admin"))
+                {
+                    @* <a asp-controller="Admin"
+                       asp-action="Index"
+                       class="btn btn-primary btn-lg me-2">
+                        <i class="bi bi-speedometer2 me-2"></i>
+                        Admin Dashboard
+                    </a> *@
+                }
+
+                @if (User.IsInRole("Teacher"))
+                {
+                    <a asp-controller="Attendance"
+                       asp-action="MarkAttendance"
+                       class="btn btn-primary btn-lg me-2">
+                        <i class="bi bi-calendar-check me-2"></i>
+                        Mark Attendance
+                    </a>
+
+                    <a asp-controller="Teacher"
+                       asp-action="AssignMark"
+                       class="btn btn-outline-light btn-lg">
+                        <i class="bi bi-clipboard-check me-2"></i>
+                        Assign Marks
+                    </a>
+                }
+                @if (User.IsInRole("Student"))
+                {
+                    <a asp-controller="Student"
+                       asp-action="ViewAttendance"
+                       class="btn btn-primary btn-lg me-2">
+
+                        <i class="bi bi-calendar-check me-2"></i>
+                        View Attendance
+
+                    </a>
+
+                    <a asp-controller="Student"
+                       asp-action="ViewMarks"
+                       class="btn btn-outline-light btn-lg">
+
+                        <i class="bi bi-clipboard-check me-2"></i>
+                        View Marks
+
+                    </a>
+                }
+            </div>
+        }
+        else
+        {
+            <span class="badge bg-primary fs-6 px-3 py-2">
+                School Management System
+            </span>
+
+            <h1 class="display-4 fw-bold mt-3">
+                Manage Your School
+                <span class="text-primary">Smarter.</span>
+            </h1>
+
+            <p class="lead text-white-50 mt-3">
+                A centralized platform to manage students, teachers,
+                classes, subjects, attendance and academic performance.
+            </p>
+
+            <div class="mt-4">
+                <a asp-controller="Auth"
+                   asp-action="Login"
+                   class="btn btn-primary btn-lg px-4">
+
+                    <i class="bi bi-box-arrow-in-right me-2"></i>
+                    Login
+
+                </a>
+            </div>
+        }
+    </div>
+
+
+    <!-- ================= ADMIN STATISTICS ================= -->
+    @if (User.IsInRole("Admin"))
+    {
+        <div class="row g-4 mb-5">
+
+            <!-- Students -->
+
+            <div class="col-xl-3 col-md-6">
+
+                <div class="card border-0 shadow-sm h-100">
+
+                    <div class="card-body p-4">
+
+                        <div class="d-flex justify-content-between align-items-center">
+
+                            <div>
+
+                                <p class="text-muted mb-1">
+                                    Total Students
+                                </p>
+
+                                <h2 class="fw-bold mb-0">
+                                    @Model.TotalStudents
+                                </h2>
+
+                            </div>
+
+                            <div class="bg-primary bg-opacity-10
+                                            text-primary rounded-3 p-3">
+
+                                <i class="bi bi-people-fill fs-3"></i>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Teachers -->
+
+            <div class="col-xl-3 col-md-6">
+
+                <div class="card border-0 shadow-sm h-100">
+
+                    <div class="card-body p-4">
+
+                        <div class="d-flex justify-content-between align-items-center">
+
+                            <div>
+
+                                <p class="text-muted mb-1">
+                                    Active Teachers
+                                </p>
+
+                                <h2 class="fw-bold mb-0">
+                                    @Model.TotalTeachers
+                                </h2>
+
+                            </div>
+
+                            <div class="bg-success bg-opacity-10
+                                            text-success rounded-3 p-3">
+
+                                <i class="bi bi-person-workspace fs-3"></i>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Classes -->
+
+            <div class="col-xl-3 col-md-6">
+
+                <div class="card border-0 shadow-sm h-100">
+
+                    <div class="card-body p-4">
+
+                        <div class="d-flex justify-content-between align-items-center">
+
+                            <div>
+
+                                <p class="text-muted mb-1">
+                                    Total Classes
+                                </p>
+
+                                <h2 class="fw-bold mb-0">
+                                    @Model.TotalClasses
+                                </h2>
+
+                            </div>
+
+                            <div class="bg-warning bg-opacity-10
+                                            text-warning rounded-3 p-3">
+
+                                <i class="bi bi-building fs-3"></i>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Subjects -->
+
+            <div class="col-xl-3 col-md-6">
+
+                <div class="card border-0 shadow-sm h-100">
+
+                    <div class="card-body p-4">
+
+                        <div class="d-flex justify-content-between align-items-center">
+
+                            <div>
+
+                                <p class="text-muted mb-1">
+                                    Total Subjects
+                                </p>
+
+                                <h2 class="fw-bold mb-0">
+                                    @Model.TotalSubjects
+                                </h2>
+
+                            </div>
+
+                            <div class="bg-info bg-opacity-10
+                                            text-info rounded-3 p-3">
+
+                                <i class="bi bi-book-fill fs-3"></i>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    }
+
+
+    <!-- ================= TEACHER DASHBOARD ================= -->
+    @if (User.IsInRole("Teacher"))
+    {
+        <div class="mb-5">
+
+            <div class="mb-4">
+
+                <span class="badge bg-primary-subtle text-primary">
+                    Teacher Dashboard
+                </span>
+
+                <h2 class="fw-bold mt-2">
+                    Your Teaching Overview
+                </h2>
+
+                <p class="text-muted">
+                    View your assigned subject and classes.
+                </p>
+
+            </div>
+
+
+            <div class="row g-4">
+
+                <!-- Subject -->
+
+                <div class="col-md-6">
+
+                    <div class="card border-0 shadow-sm h-100">
+
+                        <div class="card-body p-4">
+
+                            <div class="d-flex align-items-center">
+
+                                <div class="bg-primary bg-opacity-10
+                                                text-primary rounded-3 p-3 me-3">
+
+                                    <i class="bi bi-book fs-3"></i>
+
+                                </div>
+
+                                <div>
+
+                                    <p class="text-muted mb-1">
+                                        Teaching Subject
+                                    </p>
+
+                                    <h4 class="fw-bold mb-0">
+                                        @Model.TeacherSubject
+                                    </h4>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Classes -->
+
+                <div class="col-md-6">
+
+                    <div class="card border-0 shadow-sm h-100">
+
+                        <div class="card-body p-4">
+
+                            <div class="d-flex align-items-center">
+
+                                <div class="bg-success bg-opacity-10
+                                                text-success rounded-3 p-3 me-3">
+
+                                    <i class="bi bi-mortarboard-fill fs-3"></i>
+
+                                </div>
+
+                                <div>
+
+                                    <p class="text-muted mb-1">
+                                        Assigned Classes
+                                    </p>
+
+                                    <h4 class="fw-bold mb-0">
+                                        @Model.TeacherClassCount
+                                    </h4>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    }
+
+
+    <!-- ================= STUDENT DASHBOARD ================= -->
+    @if (User.IsInRole("Student"))
+    {
+        <div class="mb-5">
+
+            <div class="mb-4">
+
+                <span class="badge bg-primary-subtle text-primary">
+                    Student Dashboard
+                </span>
+
+                <h2 class="fw-bold mt-2">
+                    My Academic Dashboard
+                </h2>
+
+                <p class="text-muted">
+                    View your marks and attendance.
+                </p>
+
+            </div>
+
+
+            <div class="row g-4">
+
+                <!-- View Marks -->
+
+                <div class="col-md-6">
+
+                    <a asp-controller="Student"
+                       asp-action="ViewMarks"
+                       class="text-decoration-none">
+
+                        <div class="card border-0 shadow-sm h-100">
+
+                            <div class="card-body p-4">
+
+                                <div class="bg-primary bg-opacity-10
+                                            text-primary rounded-3
+                                            p-3 d-inline-block mb-3">
+
+                                    <i class="bi bi-bar-chart-fill fs-4"></i>
+
+                                </div>
+
+                                <h5 class="fw-bold text-dark">
+                                    View My Marks
+                                </h5>
+
+                                <p class="text-muted mb-0">
+                                    View your subject-wise marks
+                                    and academic performance.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </a>
+
+                </div>
+
+
+                <!-- View Attendance -->
+
+                <div class="col-md-6">
+
+                    <a asp-controller="Student"
+                       asp-action="ViewAttendance"
+                       class="text-decoration-none">
+
+                        <div class="card border-0 shadow-sm h-100">
+
+                            <div class="card-body p-4">
+
+                                <div class="bg-success bg-opacity-10
+                                            text-success rounded-3
+                                            p-3 d-inline-block mb-3">
+
+                                    <i class="bi bi-calendar-check-fill fs-4"></i>
+
+                                </div>
+
+                                <h5 class="fw-bold text-dark">
+                                    View My Attendance
+                                </h5>
+
+                                <p class="text-muted mb-0">
+                                    Check your attendance history.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+    }
+
+    <!-- ================= QUICK ACTIONS ================= -->
+    @if (User.Identity?.IsAuthenticated == true)
+    {
+        <div class="mb-5">
+
+            <div class="mb-4">
+
+                <span class="badge bg-secondary-subtle text-secondary">
+                    Quick Actions
+                </span>
+
+                <h2 class="fw-bold mt-2">
+                    Get Started
+                </h2>
+
+
+            </div>
+
+
+            <div class="row g-4">
+
+                @if (User.IsInRole("Admin"))
+                {
+                    <!-- Add Student -->
+
+                    <div class="col-xl-3 col-md-6">
+
+                        <a asp-controller="Student"
+                           asp-action="AddStudent"
+                           class="text-decoration-none">
+
+                            <div class="card border-0 shadow-sm h-100">
+
+                                <div class="card-body p-4">
+
+                                    <div class="bg-primary bg-opacity-10
+                                                        text-primary rounded-3
+                                                        p-3 d-inline-block mb-3">
+
+                                        <i class="bi bi-person-plus-fill fs-4"></i>
+
+                                    </div>
+
+                                    <h5 class="fw-bold text-dark">
+                                        Add Student
+                                    </h5>
+
+                                    <p class="text-muted mb-0">
+                                        Register a new student in the system.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </a>
+
+                    </div>
+
+
+                    <!-- Add Teacher -->
+
+                    <div class="col-xl-3 col-md-6">
+
+                        <a asp-controller="Teacher"
+                           asp-action="AddTeacher"
+                           class="text-decoration-none">
+
+                            <div class="card border-0 shadow-sm h-100">
+
+                                <div class="card-body p-4">
+
+                                    <div class="bg-success bg-opacity-10
+                                                        text-success rounded-3
+                                                        p-3 d-inline-block mb-3">
+
+                                        <i class="bi bi-person-plus fs-4"></i>
+
+                                    </div>
+
+                                    <h5 class="fw-bold text-dark">
+                                        Add Teacher
+                                    </h5>
+
+                                    <p class="text-muted mb-0">
+                                        Add a new teacher to the school.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </a>
+
+                    </div>
+
+
+                    <!-- Add Subject -->
+
+                    <div class="col-xl-3 col-md-6">
+
+                        <a asp-controller="Subject"
+                           asp-action="AddSubject"
+                           class="text-decoration-none">
+
+                            <div class="card border-0 shadow-sm h-100">
+
+                                <div class="card-body p-4">
+
+                                    <div class="bg-warning bg-opacity-10
+                                                        text-warning rounded-3
+                                                        p-3 d-inline-block mb-3">
+
+                                        <i class="bi bi-journal-plus fs-4"></i>
+
+                                    </div>
+
+                                    <h5 class="fw-bold text-dark">
+                                        Add Subject
+                                    </h5>
+
+                                    <p class="text-muted mb-0">
+                                        Create and assign a new subject.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </a>
+
+                    </div>
+
+
+                }
+
+
+                @if (User.IsInRole("Teacher"))
+                {
+                    <!-- Attendance -->
+
+                    <div class="col-xl-4 col-md-6">
+
+                        <a asp-controller="Attendance"
+                           asp-action="MarkAttendance"
+                           class="text-decoration-none">
+
+                            <div class="card border-0 shadow-sm h-100">
+
+                                <div class="card-body p-4">
+
+                                    <div class="bg-primary bg-opacity-10
+                                                        text-primary rounded-3
+                                                        p-3 d-inline-block mb-3">
+
+                                        <i class="bi bi-calendar-check-fill fs-4"></i>
+
+                                    </div>
+
+                                    <h5 class="fw-bold text-dark">
+                                        Mark Attendance
+                                    </h5>
+
+                                    <p class="text-muted mb-0">
+                                        Record daily attendance for your students.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </a>
+
+                    </div>
+
+
+                    <!-- Marks -->
+
+                    <div class="col-xl-4 col-md-6">
+
+                        <a asp-controller="Teacher"
+                           asp-action="AssignMark"
+                           class="text-decoration-none">
+
+                            <div class="card border-0 shadow-sm h-100">
+
+                                <div class="card-body p-4">
+
+                                    <div class="bg-success bg-opacity-10
+                                                        text-success rounded-3
+                                                        p-3 d-inline-block mb-3">
+
+                                        <i class="bi bi-clipboard-check-fill fs-4"></i>
+
+                                    </div>
+
+                                    <h5 class="fw-bold text-dark">
+                                        Assign Marks
+                                    </h5>
+
+                                    <p class="text-muted mb-0">
+                                        Enter or update student marks.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </a>
+
+                    </div>
+
+
+                    <!-- Students -->
+
+                    <div class="col-xl-4 col-md-6">
+
+                        <a asp-controller="Teacher"
+                           asp-action="Index"
+                           class="text-decoration-none">
+
+                            <div class="card border-0 shadow-sm h-100">
+
+                                <div class="card-body p-4">
+
+                                    <div class="bg-warning bg-opacity-10
+                                                        text-warning rounded-3
+                                                        p-3 d-inline-block mb-3">
+
+                                        <i class="bi bi-people-fill fs-4"></i>
+
+                                    </div>
+
+                                    <h5 class="fw-bold text-dark">
+                                        Students
+                                    </h5>
+
+                                    <p class="text-muted mb-0">
+                                        View students assigned to your classes.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </a>
+
+                    </div>
+                }
+
+            </div>
+
+        </div>
+    }
+
+
+    <!-- ================= RECENT STUDENTS ================= -->
+    @if (User.IsInRole("Admin") && Model.RecentStudents.Any())
+    {
+        <div class="mb-5">
+
+            <div class="mb-4">
+
+                <span class="badge bg-secondary-subtle text-secondary">
+                    Student Records
+                </span>
+
+                <h2 class="fw-bold mt-2">
+                    Recently Added Students
+                </h2>
+
+            </div>
+
+
+            <div class="card border-0 shadow-sm">
+
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle mb-0">
+
+                        <thead class="table-light">
+
+                            <tr>
+
+                                <th class="px-4">
+                                    Roll No.
+                                </th>
+
+                                <th>
+                                    Student
+                                </th>
+
+                                <th>
+                                    Class
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            @foreach (var student in Model.RecentStudents)
+                            {
+                                <tr>
+
+                                    <td class="px-4">
+
+                                        <span class="badge bg-primary">
+                                            @student.RollNo
+                                        </span>
+
+                                    </td>
+
+                                    <td>
+
+                                        <div class="d-flex align-items-center">
+
+                                            <div class="bg-primary
+                                                                bg-opacity-10
+                                                                text-primary
+                                                                rounded-circle
+                                                                d-flex
+                                                                align-items-center
+                                                                justify-content-center
+                                                                me-3"
+                                                 style="width:40px;height:40px;">
+
+                                                @(student.User?.Name?.Substring(0, 1).ToUpper() ?? "?")
+
+                                            </div>
+
+                                            <span class="fw-semibold">
+
+                                                @student.User?.Name
+
+                                            </span>
+
+                                        </div>
+
+                                    </td>
+
+                                    <td>
+
+                                        <span class="text-muted">
+                                            Class @student.Class?.Standard
+                                        </span>
+
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+    }
+
+
+    <!-- ================= RECENT TEACHERS ================= -->
+    @if (User.IsInRole("Admin") && Model.RecentTeachers.Any())
+    {
+        <div class="mb-5">
+
+            <div class="mb-4">
+
+                <span class="badge bg-secondary-subtle text-secondary">
+                    Teacher Records
+                </span>
+
+                <h2 class="fw-bold mt-2">
+                    Recently Added Teachers
+                </h2>
+
+            </div>
+
+
+            <div class="card border-0 shadow-sm">
+
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle mb-0">
+
+                        <thead class="table-light">
+
+                            <tr>
+
+                                <th class="px-4">
+                                    Employee No.
+                                </th>
+
+                                <th>
+                                    Teacher
+                                </th>
+
+                                <th>
+                                    Subject
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            @foreach (var teacher in Model.RecentTeachers)
+                            {
+                                <tr>
+
+                                    <!-- Employee Number -->
+
+                                    <td class="px-4">
+
+                                        <span class="badge bg-primary">
+                                            @teacher.EmployeeNumber
+                                        </span>
+
+                                    </td>
+
+
+                                    <!-- Teacher -->
+
+                                    <td>
+
+                                        <div class="d-flex align-items-center">
+
+                                            <div class="bg-primary
+                                                            bg-opacity-10
+                                                            text-primary
+                                                            rounded-circle
+                                                            d-flex
+                                                            align-items-center
+                                                            justify-content-center
+                                                            me-3"
+                                                 style="width:40px;height:40px;">
+
+                                                @(teacher.User?.Name?.Substring(0, 1).ToUpper() ?? "?")
+
+                                            </div>
+
+                                            <span class="fw-semibold">
+
+                                                @teacher.User?.Name
+
+                                            </span>
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <!-- Subject -->
+
+                                    <td>
+
+                                        <span class="text-muted">
+
+                                            @teacher.Subject?.Name
+
+                                        </span>
+
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+    }
+</div>

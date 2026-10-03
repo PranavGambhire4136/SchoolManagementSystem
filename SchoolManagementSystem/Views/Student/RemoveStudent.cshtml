@@ -1,0 +1,68 @@
+﻿@model SchoolManagementSystem.Models.ViewModel.RemoveStudentViewModel
+
+@{
+    ViewData["Title"] = "Remove Student";
+}
+
+<h2>Remove Student</h2>
+
+<!-- Select Class -->
+<form asp-controller="Student"
+      asp-action="RemoveStudent"
+      method="get">
+
+    <div>
+        <label>Select Class</label>
+
+        <select name="classId" onchange="this.form.submit()">
+            <option value="">-- Select Class --</option>
+
+            @foreach (var item in Model.Classes)
+            {
+                <option value="@item.Id"
+                        selected="@(Model.classId == item.Id)">
+                    Class @item.Standard
+                </option>
+            }
+        </select>
+    </div>
+</form>
+
+
+@if (Model.Users != null && Model.Users.Any())
+{
+    <br />
+
+    <!-- Select Student -->
+    <form asp-controller="Student"
+          asp-action="ConfirmRemoveStudent"
+          method="get">
+
+        <input type="hidden"
+               name="classId"
+               value="@Model.classId" />
+
+        <div>
+            <label>Select Student</label>
+
+            <select name="studentId">
+                <option value="">-- Select Student --</option>
+
+                @foreach (var student in Model.Users)
+                {
+                    <option value="@student.Id">
+                        @student.User.Name - Roll No. @student.RollNo
+                    </option>
+                }
+            </select>
+        </div>
+
+        <br />
+
+        <button type="submit"
+                class="btn btn-danger">
+            Select Student
+        </button>
+
+    </form>
+}

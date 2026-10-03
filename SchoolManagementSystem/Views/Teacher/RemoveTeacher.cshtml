@@ -1,0 +1,65 @@
+﻿@model List<SchoolManagementSystem.Models.Teacher>
+
+@{
+    ViewData["Title"] = "Remove Teacher";
+}
+
+<div class="container mt-4">
+    <div class="card">
+
+        <div class="card-header">
+            <h3>Remove Teacher</h3>
+        </div>
+
+        <div class="card-body">
+
+            @if (Model.Any())
+            {
+                <form asp-controller="Teacher"
+                      asp-action="RemoveTeacher"
+                      method="post">
+
+                    @Html.AntiForgeryToken()
+
+                    <div class="mb-3">
+                        <label class="form-label">
+                            Select Teacher
+                        </label>
+
+                        <select name="id"
+                                class="form-select"
+                                required>
+
+                            <option value="">
+                                -- Select Teacher --
+                            </option>
+
+                            @foreach (var teacher in Model)
+                            {
+                                <option value="@teacher.Id">
+                                    @teacher.User?.Name
+                                    - @teacher.Subject?.Name
+                                    - Employee No. @teacher.EmployeeNumber
+                                </option>
+                            }
+
+                        </select>
+                    </div>
+
+                    <button type="submit"
+                            class="btn btn-danger">
+                        Remove Teacher
+                    </button>
+
+                </form>
+            }
+            else
+            {
+                <div class="alert alert-info">
+                    No active teachers found.
+                </div>
+            }
+
+        </div>
+    </div>
+</div>

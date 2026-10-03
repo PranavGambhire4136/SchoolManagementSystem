@@ -1,0 +1,175 @@
+﻿@model SchoolManagementSystem.Models.ViewModel.AssignMarkViewModel
+
+@{
+    ViewData["Title"] = "Assign Marks";
+
+    var selectedClassId = Context.Request.Query["ClassId"].ToString();
+    var selectedStudentId = Context.Request.Query["StudentId"].ToString();
+}
+
+<div class="container mt-4">
+
+    <div class="card">
+
+        <div class="card-header">
+            <h3>Assign Marks</h3>
+        </div>
+
+        <div class="card-body">
+
+            <!-- ================= SELECT CLASS ================= -->
+
+            <form asp-controller="Teacher"
+                  asp-action="AssignMark"
+                  method="get">
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Select Class
+                    </label>
+
+                    <select name="ClassId"
+                            class="form-select"
+                            onchange="this.form.submit()">
+
+                        <option value="">
+                            -- Select Class --
+                        </option>
+
+                        @foreach (var item in Model.ClassId)
+                        {
+                            <option value="@item.Id"
+                                    selected="@(selectedClassId == item.Id.ToString())">
+
+                                Class @item.Standard
+
+                            </option>
+                        }
+
+                    </select>
+
+                </div>
+
+            </form>
+
+
+            <!-- ================= SELECT STUDENT ================= -->
+            @if (!string.IsNullOrEmpty(selectedClassId))
+            {
+                @if (Model.StudentId != null && Model.StudentId.Any())
+                {
+                    <form asp-controller="Teacher"
+                          asp-action="AssignMark"
+                          method="get">
+
+                        <!-- Keep selected class -->
+                        <input type="hidden"
+                               name="ClassId"
+                               value="@selectedClassId" />
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Select Student
+                            </label>
+
+                            <select name="StudentId"
+                                    class="form-select"
+                                    onchange="this.form.submit()">
+
+                                <option value="">
+                                    -- Select Student --
+                                </option>
+
+                                @foreach (var student in Model.StudentId)
+                                {
+                                    <option value="@student.Id"
+                                            selected="@(selectedStudentId == student.Id.ToString())">
+
+                                        Roll No. @student.RollNo
+                                        -
+                                        @student.User?.Name
+
+                                    </option>
+                                }
+
+                            </select>
+
+                        </div>
+
+                    </form>
+                }
+                else
+                {
+                    <div class="alert alert-info">
+                        No students found in this class.
+                    </div>
+                }
+            }
+
+
+            <!-- ================= MARKS ================= -->
+            @if (!string.IsNullOrEmpty(selectedStudentId))
+            {
+                <hr />
+
+                <form asp-controller="Teacher"
+                      asp-action="AssignMark"
+                      method="post">
+
+                    @Html.AntiForgeryToken()
+
+                    <!-- Selected Student -->
+                    <input type="hidden"
+                           name="SingleStudentId"
+                           value="@selectedStudentId" />
+
+
+                    <div class="mb-3">
+
+                        <label asp-for="MarksObtained"
+                               class="form-label">
+                            Marks Obtained
+                        </label>
+
+                        <input asp-for="MarksObtained"
+                               type="number"
+                               class="form-control"
+                               min="0"
+                               required />
+
+                    </div>
+
+
+                    <div class="mb-3">
+
+                        <label asp-for="MaxMarks"
+                               class="form-label">
+                            Maximum Marks
+                        </label>
+
+                        <input asp-for="MaxMarks"
+                               type="number"
+                               class="form-control"
+                               min="1"
+                               required />
+
+                    </div>
+
+
+                    <button type="submit"
+                            class="btn btn-primary">
+
+                        Assign / Update Marks
+
+                    </button>
+
+                </form>
+            }
+
+        </div>
+
+    </div>
+
+</div>
